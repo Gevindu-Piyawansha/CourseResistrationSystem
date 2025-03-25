@@ -15,20 +15,21 @@ import java.awt.*;
 
 
 public class FacultyDashboardUI {
-    public static void showDashboard() {
+   public static void showDashboard() {
         JFrame frame = new JFrame("Faculty Dashboard");
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
 
-        JLabel label = new JLabel("Welcome, Faculty!");
-        JButton reportButton = new JButton("Generate Reports");
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Welcome, Faculty!"));
 
-        reportButton.addActionListener(e -> ReportUI.showReportDashboard());
+        JButton viewCoursesButton = new JButton("View Assigned Courses");
+        JButton viewStudentsButton = new JButton("View Student Progress");
 
-        frame.add(label);
-        frame.add(reportButton);
+        panel.add(viewCoursesButton);
+        panel.add(viewStudentsButton);
 
+        frame.add(panel);
         frame.setVisible(true);
     }
 }

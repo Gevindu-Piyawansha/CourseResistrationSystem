@@ -18,9 +18,16 @@ public class StudentDashboardUI {
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JLabel label = new JLabel("Welcome, Student!");
-        frame.add(label);
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Welcome, Student!"));
 
+        JButton registerCoursesButton = new JButton("Register for Courses");
+        JButton viewScheduleButton = new JButton("View Schedule");
+
+        panel.add(registerCoursesButton);
+        panel.add(viewScheduleButton);
+
+        frame.add(panel);
         frame.setVisible(true);
     }
 }

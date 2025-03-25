@@ -13,20 +13,23 @@ import java.awt.*;
 
 
 public class AdminDashboardUI {
-    public static void showDashboard() {
+public static void showDashboard() {
         JFrame frame = new JFrame("Admin Dashboard");
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new FlowLayout());
 
-        JLabel label = new JLabel("Welcome, Admin!");
-        JButton reportButton = new JButton("Generate Reports");
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Welcome, Admin!"));
 
-        reportButton.addActionListener(e -> ReportUI.showReportDashboard());
+        JButton manageCoursesButton = new JButton("Manage Courses");
+        JButton manageStudentsButton = new JButton("Manage Students");
+        JButton generateReportsButton = new JButton("Generate Reports");
 
-        frame.add(label);
-        frame.add(reportButton);
+        panel.add(manageCoursesButton);
+        panel.add(manageStudentsButton);
+        panel.add(generateReportsButton);
 
+        frame.add(panel);
         frame.setVisible(true);
     }
 }
