@@ -32,4 +32,8 @@ public class FacultyDashboardUI {
         frame.add(panel);
         frame.setVisible(true);
     }
+
+    static void showFacultyDashboard() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

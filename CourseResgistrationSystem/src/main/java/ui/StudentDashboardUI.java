@@ -30,4 +30,8 @@ public class StudentDashboardUI {
         frame.add(panel);
         frame.setVisible(true);
     }
+
+    static void showStudentDashboard() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

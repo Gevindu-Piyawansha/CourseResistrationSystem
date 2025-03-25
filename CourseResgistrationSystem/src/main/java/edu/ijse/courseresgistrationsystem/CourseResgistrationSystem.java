@@ -4,6 +4,8 @@
 
 package edu.ijse.courseresgistrationsystem;
 
+import ui.LoginUI;
+
 /**
  *
  * @author Admin
@@ -11,6 +13,6 @@ package edu.ijse.courseresgistrationsystem;
 public class CourseResgistrationSystem {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        LoginUI.showLoginScreen();
     }
 }

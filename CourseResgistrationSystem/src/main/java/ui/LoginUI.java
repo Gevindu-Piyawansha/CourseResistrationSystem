@@ -9,7 +9,6 @@ import service.AuthService;
 
 import javax.swing.*;
 import java.awt.*;
-import security.RBACUtils;
 /**
  *
  * @author Admin
@@ -61,7 +60,7 @@ public class LoginUI {
         frame.setVisible(true);
     }
     
-   private static UserDAO userDAO = new UserDAO();
+    private static UserDAO userDAO = new UserDAO();
 
     public static void showLoginScreen() {
         JFrame frame = new JFrame("Login");
@@ -84,17 +83,14 @@ public class LoginUI {
             User user = userDAO.authenticateUser(username, password);
             if (user != null) {
                 JOptionPane.showMessageDialog(frame, "Login successful!");
-                frame.dispose();
-
-                // Open role-based dashboard
-                if (RBACUtils.hasAdminAccess(user.getRole())) {
+                if (user.getRole().equals("admin")) {
                     AdminDashboardUI.showDashboard();
-                } else if (RBACUtils.hasFacultyAccess(user.getRole())) {
+                } else if (user.getRole().equals("faculty")) {
                     FacultyDashboardUI.showDashboard();
                 } else {
                     StudentDashboardUI.showDashboard();
                 }
-
+                frame.dispose();
             } else {
                 JOptionPane.showMessageDialog(frame, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
             }
