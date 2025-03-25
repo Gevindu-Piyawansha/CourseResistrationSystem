@@ -11,13 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import security.PasswordUtils;
-/**
- *
- * @author Admin
- */
-
-
 
 public class UserDAO {
 
@@ -49,7 +42,7 @@ public class UserDAO {
         try (Connection con = DBConnection.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, user.getUsername());
-            pst.setString(2, user.getHashedPassword()); // Consider encrypting passwords
+            pst.setString(2, user.getPassword()); // storing plain text password
             pst.setString(3, user.getRole());
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -58,15 +51,13 @@ public class UserDAO {
         }
     }
     
-     // Register user with hashed password
+    // Register user with plain text password
     public void registerUser(String username, String plainPassword, String role) {
-        String hashedPassword = PasswordUtils.hashPassword(plainPassword);
         String sql = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
-
         try (Connection con = DBConnection.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, username);
-            pst.setString(2, hashedPassword);
+            pst.setString(2, plainPassword);
             pst.setString(3, role);
             pst.executeUpdate();
             System.out.println("User registered successfully!");
@@ -75,17 +66,22 @@ public class UserDAO {
         }
     }
 
-    // Authenticate user with hashed password
+    // Authenticate user with plain text password comparison
     public User authenticateUser(String username, String plainPassword) {
-        String sql = "SELECT user_id, username, password, role FROM users WHERE username = ?";
+        String sql = "SELECT id, username, password, role FROM users WHERE username = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
             pst.setString(1, username);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    String storedHash = rs.getString("password");
-                    if (PasswordUtils.verifyPassword(plainPassword, storedHash)) {
-                        return new User(rs.getInt("user_id"), rs.getString("username"), storedHash, rs.getString("role"));
+                    String storedPassword = rs.getString("password");
+                    if (plainPassword.equals(storedPassword)) {
+                        return new User(
+                            rs.getInt("id"),
+                            rs.getString("username"),
+                            storedPassword,
+                            rs.getString("role")
+                        );
                     }
                 }
             }
