@@ -18,7 +18,7 @@ public class Course {
     private int maxCapacity;
 
     // Constructor
-    public Course(int creditHours, String title, int maxCapacity, String department, String prerequisites, int par1) {
+    public Course(int creditHours, String title, String department, String prerequisites, int maxCapacity) {
         this.title = title;
         this.creditHours = creditHours;
         this.department = department;
@@ -73,5 +73,17 @@ public class Course {
 
     public void setMaxCapacity(int maxCapacity) {
         this.maxCapacity = maxCapacity;
+    }
+
+    public Object getCourseCode() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Object getCourseName() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Object getCredits() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

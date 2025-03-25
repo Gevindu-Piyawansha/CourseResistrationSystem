@@ -21,7 +21,7 @@ public class Student {
     private String contact;
 
     // Constructor
-    public Student(int year, String name, String program, String contact, int parseInt, String string) {
+    public Student(int year, int parseInt, String name, String program, String contact) {
         this.name = name;
         this.dob = dob;
         this.program = program;
@@ -76,5 +76,17 @@ public class Student {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public Object getFirstName() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Object getLastName() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public Object getEmail() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

@@ -43,10 +43,9 @@ public class StudentRegistrationUI {
 
         registerButton.addActionListener(e -> {
             Student student = new Student(
-                    Integer.parseInt(yearField.getText()), nameField.getText(),
+                    Integer.parseInt(yearField.getText()), Integer.parseInt(yearField.getText()), nameField.getText(),
                 programField.getText(),
-                contactField.getText(), Integer.parseInt(yearField.getText()), ""
-            );
+                contactField.getText());
             StudentService studentService = new StudentService();
             boolean result = studentService.registerStudent(student);
             JOptionPane.showMessageDialog(frame, result ? "Registration Successful!" : "Registration Failed");

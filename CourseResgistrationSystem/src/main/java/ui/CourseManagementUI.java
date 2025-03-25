@@ -35,7 +35,7 @@ public class CourseManagementUI {
         frame.add(addButton);
 
         addButton.addActionListener(e -> {
-            Course course = new Course(0, titleField.getText(), Integer.parseInt(creditHoursField.getText()), departmentField.getText(), "", 50);
+            Course course = new Course(0, titleField.getText(), departmentField.getText(), "", Integer.parseInt(creditHoursField.getText()));
             new CourseDAO().addCourse(course);
             JOptionPane.showMessageDialog(frame, "Course Added!");
         });

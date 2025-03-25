@@ -5,36 +5,49 @@
 package ui;
 import javax.swing.*;
 import java.awt.*;
+
+
 /**
  *
  * @author Admin
  */
 
 
-
 public class AdminDashboardUI {
-public static void showDashboard() {
+    public static void showDashboard() {
         JFrame frame = new JFrame("Admin Dashboard");
-        frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 400);
+        frame.setLayout(new BorderLayout());
 
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Welcome, Admin!"));
+        // Menu panel with buttons for each function
+        JPanel menuPanel = new JPanel();
+        JButton manageCoursesBtn = new JButton("Manage Courses");
+        JButton manageStudentsBtn = new JButton("Manage Students");
+        JButton generateReportsBtn = new JButton("Generate Reports");
 
-        JButton manageCoursesButton = new JButton("Manage Courses");
-        JButton manageStudentsButton = new JButton("Manage Students");
-        JButton generateReportsButton = new JButton("Generate Reports");
+        menuPanel.add(manageCoursesBtn);
+        menuPanel.add(manageStudentsBtn);
+        menuPanel.add(generateReportsBtn);
+        frame.add(menuPanel, BorderLayout.NORTH);
 
-        panel.add(manageCoursesButton);
-        panel.add(manageStudentsButton);
-        panel.add(generateReportsButton);
+        // Button actions open a dialog with the respective panel
+        manageCoursesBtn.addActionListener(e -> {
+            ManageCoursesPanel coursesPanel = new ManageCoursesPanel();
+            JOptionPane.showMessageDialog(frame, coursesPanel, "Manage Courses", JOptionPane.PLAIN_MESSAGE);
+        });
 
-        frame.add(panel);
+        manageStudentsBtn.addActionListener(e -> {
+            ManageStudentsPanel studentsPanel = new ManageStudentsPanel();
+            JOptionPane.showMessageDialog(frame, studentsPanel, "Manage Students", JOptionPane.PLAIN_MESSAGE);
+        });
+
+        generateReportsBtn.addActionListener(e -> {
+            GenerateReportsPanel reportsPanel = new GenerateReportsPanel();
+            JOptionPane.showMessageDialog(frame, reportsPanel, "Generate Reports", JOptionPane.PLAIN_MESSAGE);
+        });
+
         frame.setVisible(true);
     }
-
-    static void showAdminDashboard() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
 }
+

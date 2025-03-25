@@ -46,9 +46,8 @@ public class CourseDAO {
             while (rs.next()) {
                 Course course = new Course(
                         rs.getInt("credit_hours"), rs.getString("title"),
-                        rs.getInt("max_capacity"),
                         rs.getString("department"),
-                        rs.getString("prerequisites"), 50);
+                        rs.getString("prerequisites"), rs.getInt("max_capacity"));
                 course.setId(rs.getInt("id"));
                 courses.add(course);
             }

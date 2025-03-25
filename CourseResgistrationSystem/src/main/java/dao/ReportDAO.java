@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 /**
  *
  * @author Admin
@@ -82,5 +83,9 @@ public class ReportDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Map<String, Integer> getEnrollmentsReport() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

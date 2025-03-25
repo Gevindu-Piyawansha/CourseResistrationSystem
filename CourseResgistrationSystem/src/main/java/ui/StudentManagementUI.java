@@ -40,7 +40,7 @@ public class StudentManagementUI {
         frame.add(addButton);
 
         addButton.addActionListener(e -> {
-            Student student = new Student(0, nameField.getText(), dobField.getText(), programField.getText(), Integer.parseInt(yearField.getText()), "");
+            Student student = new Student(0, Integer.parseInt(yearField.getText()), nameField.getText(), dobField.getText(), programField.getText());
             new StudentDAO().addStudent(student);
             JOptionPane.showMessageDialog(frame, "Student Added!");
         });
