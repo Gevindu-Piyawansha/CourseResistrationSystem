@@ -32,4 +32,5 @@ public static void showDashboard() {
         frame.add(panel);
         frame.setVisible(true);
     }
+
 }

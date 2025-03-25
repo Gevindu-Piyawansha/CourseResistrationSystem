@@ -4,7 +4,7 @@
  */
 package ui;
 
-import service.EnrollmentService;
+import dao.EnrollmentDAO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,37 +14,34 @@ import java.awt.*;
  * @author Admin
  */
 
-
 public class EnrollmentUI {
-    private static EnrollmentService enrollmentService = new EnrollmentService();
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Course Enrollment");
-        frame.setSize(400, 200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public static void showUI() {
+        JFrame frame = new JFrame("Enrollment Management");
+        frame.setSize(400, 300);
         frame.setLayout(new FlowLayout());
 
-        JTextField studentIdField = new JTextField(10);
-        JTextField courseIdField = new JTextField(10);
+        JTextField studentIdField = new JTextField(5);
+        JTextField courseIdField = new JTextField(5);
         JButton enrollButton = new JButton("Enroll");
-
-        enrollButton.addActionListener(e -> {
-            int studentId = Integer.parseInt(studentIdField.getText());
-            int courseId = Integer.parseInt(courseIdField.getText());
-
-            boolean success = enrollmentService.enrollStudent(studentId, courseId);
-            if (success) {
-                JOptionPane.showMessageDialog(frame, "Enrollment successful!");
-            } else {
-                JOptionPane.showMessageDialog(frame, "Enrollment failed.");
-            }
-        });
+        JButton dropButton = new JButton("Drop");
 
         frame.add(new JLabel("Student ID:"));
         frame.add(studentIdField);
         frame.add(new JLabel("Course ID:"));
         frame.add(courseIdField);
         frame.add(enrollButton);
+        frame.add(dropButton);
+
+        enrollButton.addActionListener(e -> {
+            new EnrollmentDAO().enrollStudent(Integer.parseInt(studentIdField.getText()), Integer.parseInt(courseIdField.getText()));
+            JOptionPane.showMessageDialog(frame, "Student Enrolled!");
+        });
+
+        dropButton.addActionListener(e -> {
+            new EnrollmentDAO().dropCourse(Integer.parseInt(studentIdField.getText()), Integer.parseInt(courseIdField.getText()));
+            JOptionPane.showMessageDialog(frame, "Course Dropped!");
+        });
 
         frame.setVisible(true);
     }

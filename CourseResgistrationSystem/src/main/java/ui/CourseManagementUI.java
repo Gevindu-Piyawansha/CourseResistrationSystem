@@ -3,46 +3,42 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ui;
-import service.CourseService;
+
+import dao.CourseDAO;
 import entity.Course;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 /**
  *
  * @author Admin
  */
-
-
-
 public class CourseManagementUI {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Course Management");
-        frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
 
+    public static void showUI() {
+        JFrame frame = new JFrame("Course Management");
+        frame.setSize(400, 300);
+        frame.setLayout(new FlowLayout());
+
+        JTextField titleField = new JTextField(20);
+        JTextField creditHoursField = new JTextField(5);
+        JTextField departmentField = new JTextField(20);
         JButton addButton = new JButton("Add Course");
-        JButton deleteButton = new JButton("Delete Course");
-        JButton updateButton = new JButton("Update Course");
+
+        frame.add(new JLabel("Title:"));
+        frame.add(titleField);
+        frame.add(new JLabel("Credit Hours:"));
+        frame.add(creditHoursField);
+        frame.add(new JLabel("Department:"));
+        frame.add(departmentField);
+        frame.add(addButton);
 
         addButton.addActionListener(e -> {
-            // Open dialog or another window for adding a course
-            // This can be expanded to collect data via inputs and call CourseService.addCourse()
+            Course course = new Course(0, titleField.getText(), Integer.parseInt(creditHoursField.getText()), departmentField.getText(), "", 50);
+            new CourseDAO().addCourse(course);
+            JOptionPane.showMessageDialog(frame, "Course Added!");
         });
-
-        deleteButton.addActionListener(e -> {
-            // Open dialog to select a course and delete it using CourseService.deleteCourse()
-        });
-
-        updateButton.addActionListener(e -> {
-            // Open dialog to select and update course
-        });
-
-        frame.add(addButton, BorderLayout.NORTH);
-        frame.add(deleteButton, BorderLayout.CENTER);
-        frame.add(updateButton, BorderLayout.SOUTH);
 
         frame.setVisible(true);
     }

@@ -21,7 +21,7 @@ public class Student {
     private String contact;
 
     // Constructor
-    public Student(String name, LocalDate dob, String program, int year, String contact) {
+    public Student(int year, String name, String program, String contact, int parseInt, String string) {
         this.name = name;
         this.dob = dob;
         this.program = program;

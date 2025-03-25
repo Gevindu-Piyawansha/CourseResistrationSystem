@@ -41,4 +41,5 @@ public class EnrollmentService {
         Enrollment enrollment = new Enrollment(studentId, courseId);
         return enrollmentDAO.saveEnrollment(enrollment);
     }
+    
 }

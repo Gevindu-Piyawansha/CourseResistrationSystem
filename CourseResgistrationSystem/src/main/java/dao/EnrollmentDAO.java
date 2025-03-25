@@ -121,4 +121,12 @@ public class EnrollmentDAO {
         }
         return false;
     }
+
+    public void enrollStudent(int parseInt, int parseInt0) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void dropCourse(int parseInt, int parseInt0) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

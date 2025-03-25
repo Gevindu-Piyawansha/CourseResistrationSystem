@@ -18,7 +18,7 @@ public class Course {
     private int maxCapacity;
 
     // Constructor
-    public Course(String title, int creditHours, String department, String prerequisites, int maxCapacity) {
+    public Course(int creditHours, String title, int maxCapacity, String department, String prerequisites, int par1) {
         this.title = title;
         this.creditHours = creditHours;
         this.department = department;

@@ -45,12 +45,10 @@ public class CourseDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Course course = new Course(
-                        rs.getString("title"),
-                        rs.getInt("credit_hours"),
+                        rs.getInt("credit_hours"), rs.getString("title"),
+                        rs.getInt("max_capacity"),
                         rs.getString("department"),
-                        rs.getString("prerequisites"),
-                        rs.getInt("max_capacity")
-                );
+                        rs.getString("prerequisites"), 50);
                 course.setId(rs.getInt("id"));
                 courses.add(course);
             }
@@ -92,6 +90,10 @@ public class CourseDAO {
     }
 
     public Course getCourseById(int courseId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void addCourse(Course course) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }
