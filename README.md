@@ -1,1 +1,1 @@
-"# CourseResistrationSystem1" 
+"# CourseResistrationSystem" 
