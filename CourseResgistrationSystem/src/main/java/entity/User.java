@@ -13,13 +13,14 @@ package entity;
 public class User {
     private int id;
     private String username;
-    private String password;
+    private String hashedPassword;  // Store hashed password instead of plain text
+
     private String role; // "STUDENT", "FACULTY", "ADMIN"
 
     public User(int id, String username, String password, String role) {
         this.id = id;
         this.username = username;
-        this.password = password;
+        this.hashedPassword = hashedPassword;
         this.role = role;
     }
 
@@ -40,12 +41,12 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void sethashedPassword(String password) {
+        this.hashedPassword = password;
     }
 
     public String getRole() {

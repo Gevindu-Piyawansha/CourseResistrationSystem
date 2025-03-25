@@ -11,4 +11,13 @@
         <maven.compiler.target>21</maven.compiler.target>
         <exec.mainClass>edu.ijse.courseresgistrationsystem.CourseResgistrationSystem</exec.mainClass>
     </properties>
+    <dependencies>
+    <dependency>
+        <groupId>org.mindrot</groupId>
+        <artifactId>jbcrypt</artifactId>
+        <version>0.4</version>
+      <type>jar</type>
+    </dependency>
+</dependencies>
+
 </project>
