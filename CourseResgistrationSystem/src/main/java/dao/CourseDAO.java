@@ -90,4 +90,8 @@ public class CourseDAO {
             return false;
         }
     }
+
+    public Course getCourseById(int courseId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
