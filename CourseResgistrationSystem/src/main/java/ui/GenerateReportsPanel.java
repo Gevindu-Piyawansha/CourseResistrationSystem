@@ -13,23 +13,20 @@ import java.util.Map;
  * @author Admin
  */
 
-
-
-
 public class GenerateReportsPanel extends JPanel {
     private ReportDAO reportDAO = new ReportDAO();
 
     public GenerateReportsPanel() {
         setLayout(new BorderLayout());
         
-        // Get report data: key = course name, value = number of enrollments
-        Map<String, Integer> reportData = reportDAO.getEnrollmentsReport();
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, Integer> entry : reportData.entrySet()) {
-            sb.append("Course: ").append(entry.getKey())
-              .append(" - Enrollments: ").append(entry.getValue()).append("\n");
-        }
-        JTextArea textArea = new JTextArea(sb.toString());
+        // Get the enrollment report string from the DAO.
+        String reportContent = reportDAO.getCourseEnrollmentReportString();
+        
+        // Create a text area to display the report.
+        JTextArea textArea = new JTextArea(reportContent, 15, 30);
+        textArea.setEditable(false);
+        // Set a monospaced font for proper alignment.
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         add(new JScrollPane(textArea), BorderLayout.CENTER);
     }
 }
