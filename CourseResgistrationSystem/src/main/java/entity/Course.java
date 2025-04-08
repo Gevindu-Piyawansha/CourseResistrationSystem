@@ -15,9 +15,10 @@ public class Course {
     private String courseName;
     private String description;
     private int credits;
+//    private String schedule;
     
  
-    // Constructor with id (if needed)
+    // Constructor 
     public Course(int id, String courseCode, String courseName, String description, int credits) {
         this.id = id;
         this.courseCode = courseCode;
@@ -57,4 +58,10 @@ public class Course {
     public void setCredits(int credit) {
         this.credits = credit;
     }
+//     public String getSchedule() {
+//        return schedule;
+//    }
+//    public void setSchedule(String schedule) {
+//        this.schedule = schedule;
+//    }
 }

@@ -14,7 +14,8 @@ public class Student {
     private String firstName;
     private String lastName;
     private String email;
-
+//private String progress;
+    
     // Constructor with all fields
     public Student(int id, int userId, String firstName, String lastName, String email) {
         this.id = id;
