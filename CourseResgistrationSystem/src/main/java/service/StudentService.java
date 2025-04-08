@@ -11,14 +11,23 @@ import entity.Student;
  * @author Admin
  */
 
-
 public class StudentService {
     private StudentDAO studentDAO = new StudentDAO();
 
     public boolean registerStudent(Student student) {
-        if (student.getName().isEmpty() || student.getDob() == null) {
+        // Validate that essential fields are provided
+        if (student.getFirstName() == null || student.getFirstName().isEmpty() ||
+            student.getLastName() == null || student.getLastName().isEmpty() ||
+            student.getEmail() == null || student.getEmail().isEmpty()) {
             return false;
         }
-        return studentDAO.saveStudent(student);
+        try {
+            // Use the updated addStudent method from StudentDAO
+            studentDAO.addStudent(student);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
