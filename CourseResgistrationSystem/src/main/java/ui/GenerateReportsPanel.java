@@ -16,17 +16,32 @@ import java.util.Map;
 public class GenerateReportsPanel extends JPanel {
     private ReportDAO reportDAO = new ReportDAO();
 
-    public GenerateReportsPanel() {
+    public void GenerateReportsPanel() {
         setLayout(new BorderLayout());
         
         // Get the enrollment report string from the DAO.
         String reportContent = reportDAO.getCourseEnrollmentReportString();
         
         // Create a text area to display the report.
-        JTextArea textArea = new JTextArea(reportContent, 15, 30);
+        JTextArea textArea = new JTextArea(reportContent, 50, 80);
         textArea.setEditable(false);
         // Set a monospaced font for proper alignment.
         textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
         add(new JScrollPane(textArea), BorderLayout.CENTER);
     }
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Generate Reports UI Test");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(800, 600);
+            frame.add(new GenerateReportsPanel());
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
+}
 }
