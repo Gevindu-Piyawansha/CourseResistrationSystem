@@ -12,56 +12,87 @@ import java.awt.*;
  * @author Admin
  */
 
+
 public class ReportUI {
-    private static ReportDAO reportDAO = new ReportDAO();
+    private static final ReportDAO reportDAO = new ReportDAO();
 
     public static void showReportDashboard() {
-        // Create the dashboard frame.
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+        
         JFrame frame = new JFrame("Reports Dashboard");
-        frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        // Use 3 rows, since we have 3 buttons.
-        frame.setLayout(new GridLayout(3, 1));
-
-        JButton enrollmentReportBtn = new JButton("Course Enrollment Report");
-        JButton vacantSeatsReportBtn = new JButton("Vacant Seats Report");
-        JButton studentProgressReportBtn = new JButton("Student Progress Report");
-
-        // When clicked, each button gathers its report and displays it.
+        frame.setSize(300, 200);
+        frame.setLocationRelativeTo(null);
+        
+        JPanel mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        
+        JButton enrollmentReportBtn = createButton("Course Enrollment Report");
+        JButton vacantSeatsReportBtn = createButton("Vacant Seats Report");
+        JButton studentProgressReportBtn = createButton("Student Progress Report");
+        
+        gbc.gridy = 0;
+        mainPanel.add(enrollmentReportBtn, gbc);
+        gbc.gridy = 1;
+        mainPanel.add(vacantSeatsReportBtn, gbc);
+        gbc.gridy = 2;
+        mainPanel.add(studentProgressReportBtn, gbc);
+        
         enrollmentReportBtn.addActionListener(e -> {
             String report = reportDAO.getCourseEnrollmentReportString();
-            JTextArea textArea = new JTextArea(report);
-            textArea.setEditable(false);
-            JOptionPane.showMessageDialog(frame, new JScrollPane(textArea), "Course Enrollment Report", JOptionPane.INFORMATION_MESSAGE);
+            showReportDialog(frame, "Course Enrollment Report", report);
         });
-
+        
         vacantSeatsReportBtn.addActionListener(e -> {
             String report = reportDAO.getVacantSeatsReportString();
-            JTextArea textArea = new JTextArea(report);
-            textArea.setEditable(false);
-            JOptionPane.showMessageDialog(frame, new JScrollPane(textArea), "Vacant Seats Report", JOptionPane.INFORMATION_MESSAGE);
+            showReportDialog(frame, "Vacant Seats Report", report);
         });
-
+        
         studentProgressReportBtn.addActionListener(e -> {
             String studentIdStr = JOptionPane.showInputDialog(frame, "Enter Student ID:");
             if (studentIdStr != null && !studentIdStr.trim().isEmpty()) {
                 try {
                     int studentId = Integer.parseInt(studentIdStr);
                     String report = reportDAO.getStudentProgressReportString(studentId);
-                    JTextArea textArea = new JTextArea(report);
-                    textArea.setEditable(false);
-                    JOptionPane.showMessageDialog(frame, new JScrollPane(textArea), "Student Progress Report", JOptionPane.INFORMATION_MESSAGE);
+                    showReportDialog(frame, "Student Progress Report", report);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(frame, "Invalid Student ID", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
-
-        // Add buttons to the frame.
-        frame.add(enrollmentReportBtn);
-        frame.add(vacantSeatsReportBtn);
-        frame.add(studentProgressReportBtn);
-
+        
+        frame.add(mainPanel);
         frame.setVisible(true);
+    }
+    
+    private static JButton createButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btn.setBackground(new Color(0, 120, 215));
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        return btn;
+    }
+    
+    private static void showReportDialog(JFrame parent, String title, String report) {
+        JTextArea textArea = new JTextArea(report);
+        textArea.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        textArea.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(500, 400));
+        JOptionPane.showMessageDialog(parent, scrollPane, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> showReportDashboard());
     }
 }

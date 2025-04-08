@@ -3,45 +3,35 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ui;
-import dao.ReportDAO;
 
+import dao.ReportDAO;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Map;
 /**
  *
  * @author Admin
  */
 
-public class GenerateReportsPanel extends JPanel {
-    private ReportDAO reportDAO = new ReportDAO();
 
-    public void GenerateReportsPanel() {
+public class GenerateReportsPanel extends JPanel {
+    private final ReportDAO reportDAO = new ReportDAO();
+
+    // Proper constructor (not a void method).
+    public GenerateReportsPanel() {
+        // This sets the panel's preferred size, so the dialog isn't huge by default.
+        setPreferredSize(new Dimension(600, 450));
         setLayout(new BorderLayout());
-        
-        // Get the enrollment report string from the DAO.
+
+        // Get your enrollment report string from the DAO.
         String reportContent = reportDAO.getCourseEnrollmentReportString();
-        
+
         // Create a text area to display the report.
-        JTextArea textArea = new JTextArea(reportContent, 50, 80);
+        JTextArea textArea = new JTextArea(reportContent, 16, 50);
         textArea.setEditable(false);
-        // Set a monospaced font for proper alignment.
-        textArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        add(new JScrollPane(textArea), BorderLayout.CENTER);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+
+        // Wrap the text area in a scroll pane, then add it to the panel.
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        add(scrollPane, BorderLayout.CENTER);
     }
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Generate Reports UI Test");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
-            frame.add(new GenerateReportsPanel());
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-}
 }
