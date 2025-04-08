@@ -11,79 +11,50 @@ package entity;
 
 public class Course {
     private int id;
-    private String title;
-    private int creditHours;
-    private String department;
-    private String prerequisites;
-    private int maxCapacity;
-
-    // Constructor
-    public Course(int creditHours, String title, String department, String prerequisites, int maxCapacity) {
-        this.title = title;
-        this.creditHours = creditHours;
-        this.department = department;
-        this.prerequisites = prerequisites;
-        this.maxCapacity = maxCapacity;
+    private String courseCode;
+    private String courseName;
+    private String description;
+    private int credits;
+    
+ 
+    // Constructor with id (if needed)
+    public Course(int id, String courseCode, String courseName, String description, int credits) {
+        this.id = id;
+        this.courseCode = courseCode;
+        this.courseName = courseName;
+        this.description = description;
+        this.credits = credits;
     }
-
+    
     // Getters and setters
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getTitle() {
-        return title;
+    public String getCourseCode() {
+        return courseCode;
     }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
-
-    public int getCreditHours() {
-        return creditHours;
+    public String getCourseName() {
+        return courseName;
     }
-
-    public void setCreditHours(int creditHours) {
-        this.creditHours = creditHours;
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
-
-    public String getDepartment() {
-        return department;
+    public String getDescription() {
+        return description;
     }
-
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
-    public String getPrerequisites() {
-        return prerequisites;
+    public int getCredits() {
+        return credits;
     }
-
-    public void setPrerequisites(String prerequisites) {
-        this.prerequisites = prerequisites;
-    }
-
-    public int getMaxCapacity() {
-        return maxCapacity;
-    }
-
-    public void setMaxCapacity(int maxCapacity) {
-        this.maxCapacity = maxCapacity;
-    }
-
-    public Object getCourseCode() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public Object getCourseName() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    public Object getCredits() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setCredits(int credit) {
+        this.credits = credit;
     }
 }

@@ -15,20 +15,24 @@ import java.util.List;
 
 public class CourseService {
     private CourseDAO courseDAO = new CourseDAO();
-
+    
     public boolean addCourse(Course course) {
-        return courseDAO.saveCourse(course);
+        return courseDAO.addCourse(course);
     }
-
+    
     public List<Course> getAllCourses() {
         return courseDAO.getAllCourses();
     }
-
+    
     public boolean updateCourse(Course course) {
         return courseDAO.updateCourse(course);
     }
-
+    
     public boolean deleteCourse(int courseId) {
         return courseDAO.deleteCourse(courseId);
+    }
+    
+    public Course getCourseById(int courseId) {
+        return courseDAO.getCourseById(courseId);
     }
 }
