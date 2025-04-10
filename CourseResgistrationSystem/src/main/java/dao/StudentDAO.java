@@ -110,4 +110,36 @@ public class StudentDAO {
             ex.printStackTrace();
         }
     }
+
+    // Existing methods (add, update, delete, getAllStudents, etc.)
+
+    // New method to retrieve a student by id.
+    public Student getStudentById(int id) {
+        String sql = "SELECT id, first_name, last_name, dob, program, email, enrollment_year FROM students WHERE id = ?";
+        Student student = null;
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement pst = con.prepareStatement(sql)) {
+             
+            pst.setInt(1, id);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    int studentId = rs.getInt("id");
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+                    // Handle possible NULL date (if necessary)
+                    java.sql.Date dobDate = rs.getDate("dob");
+                    String dob = (dobDate == null) ? "" : dobDate.toString();
+                    String program = rs.getString("program");
+                    String email = rs.getString("email");
+                    int enrollmentYear = rs.getInt("enrollment_year");
+                    
+                    student = new Student(studentId, firstName, lastName, dob, program, email, enrollmentYear);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return student;
+    }
 }
+

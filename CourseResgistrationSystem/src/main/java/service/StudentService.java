@@ -32,4 +32,7 @@ public class StudentService {
             return false;
         }
     }
+    public Student getStudentProfile(int id) {
+        return studentDAO.getStudentById(id);
+    }
 }
