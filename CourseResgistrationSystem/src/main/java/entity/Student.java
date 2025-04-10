@@ -8,62 +8,48 @@ import java.time.LocalDate;
  *
  * @author Admin
  */
+
+
 public class Student {
     private int id;
-    private int userId; // Optional: include if needed; otherwise, remove this field and update constructor calls.
     private String firstName;
     private String lastName;
+    private String dob; // format: "YYYY-MM-DD"
+    private String program;
     private String email;
-//private String progress;
+    private int enrollmentYear;
     
-    // Constructor with all fields
-    public Student(int id, int userId, String firstName, String lastName, String email) {
+    // Constructor with all fields.
+    public Student(int id, String firstName, String lastName, String dob, 
+                   String program, String email, int enrollmentYear) {
         this.id = id;
-        this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.dob = dob;
+        this.program = program;
         this.email = email;
-    }
-
-    // Getters and setters
-
-    public int getId() {
-        return id;
+        this.enrollmentYear = enrollmentYear;
     }
     
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
+    // Getters and setters...
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
     
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
     
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
     
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
+    public String getDob() { return dob; }
+    public void setDob(String dob) { this.dob = dob; }
     
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public String getProgram() { return program; }
+    public void setProgram(String program) { this.program = program; }
+    
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    
+    public int getEnrollmentYear() { return enrollmentYear; }
+    public void setEnrollmentYear(int enrollmentYear) { this.enrollmentYear = enrollmentYear; }
 }

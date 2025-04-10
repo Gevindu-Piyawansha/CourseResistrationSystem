@@ -15,23 +15,31 @@ import java.util.List;
  * @author Admin
  */
 
+
 public class StudentDAO {
 
-    // Inserts a new student record into the students table
+    // Inserts a new student record into the students table.
     public void addStudent(Student student) {
-        String sql = "INSERT INTO students (first_name, last_name, email) VALUES (?, ?, ?)";
+        // Do not insert the id column (assumes it is auto-generated).
+        String sql = "INSERT INTO students (first_name, last_name, dob, program, email, enrollment_year) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection(); 
              PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pst.setString(1, student.getFirstName());
             pst.setString(2, student.getLastName());
-            pst.setString(3, student.getEmail());
+            // Convert String to SQL Date (expects format "YYYY-MM-DD")
+            pst.setDate(3, Date.valueOf(student.getDob()));
+            
+            pst.setString(4, student.getProgram());
+            pst.setString(5, student.getEmail());
+            pst.setInt(6, student.getEnrollmentYear());
 
             int affectedRows = pst.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet rs = pst.getGeneratedKeys()) {
                     if (rs.next()) {
-                        // Set the generated id to the student object
+                        // Set the generated id to the student object.
                         student.setId(rs.getInt(1));
                     }
                 }
@@ -41,48 +49,56 @@ public class StudentDAO {
         }
     }
 
-    // Retrieves all student records from the students table
+    // Retrieves all student records from the students table.
     public List<Student> getAllStudents() {
-        List<Student> students = new ArrayList<>();
-        String sql = "SELECT id, first_name, last_name, email FROM students";
-        try (Connection con = DBConnection.getConnection();
-             Statement stmt = con.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+    List<Student> students = new ArrayList<>();
+    String sql = "SELECT id, first_name, last_name, dob, program, email, enrollment_year FROM students";
+    try (Connection con = DBConnection.getConnection();
+         Statement stmt = con.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String firstName = rs.getString("first_name");
-                String lastName = rs.getString("last_name");
-                String email = rs.getString("email");
-                // Using 0 for the userId field if it's not applicable
-                Student student = new Student(id, 0, firstName, lastName, email);
-                students.add(student);
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String firstName = rs.getString("first_name");
+            String lastName = rs.getString("last_name");
+            java.sql.Date dobDate = rs.getDate("dob"); // Local variable for DOB.
+            // Check if dobDate is null before converting to string.
+            String dob = (dobDate == null) ? "" : dobDate.toString();
+            String program = rs.getString("program");
+            String email = rs.getString("email");
+            int enrollmentYear = rs.getInt("enrollment_year");
+
+            Student student = new Student(id, firstName, lastName, dob, program, email, enrollmentYear);
+            students.add(student);
         }
-        return students;
+    } catch (SQLException ex) {
+        ex.printStackTrace();
     }
+    return students;
+}
 
-  
 
-    // Updates an existing student record
+    // Updates an existing student record.
     public void updateStudent(Student student) {
-        String sql = "UPDATE students SET first_name = ?, last_name = ?, email = ? WHERE id = ?";
+        String sql = "UPDATE students SET first_name = ?, last_name = ?, dob = ?, program = ?, email = ?, enrollment_year = ? " +
+                     "WHERE id = ?";
         try (Connection con = DBConnection.getConnection(); 
              PreparedStatement pst = con.prepareStatement(sql)) {
 
             pst.setString(1, student.getFirstName());
             pst.setString(2, student.getLastName());
-            pst.setString(3, student.getEmail());
-            pst.setInt(4, student.getId());
+            pst.setDate(3, Date.valueOf(student.getDob()));
+            pst.setString(4, student.getProgram());
+            pst.setString(5, student.getEmail());
+            pst.setInt(6, student.getEnrollmentYear());
+            pst.setInt(7, student.getId());
             pst.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    // Deletes a student record by id
+    // Deletes a student record by id.
     public void deleteStudent(int id) {
         String sql = "DELETE FROM students WHERE id = ?";
         try (Connection con = DBConnection.getConnection(); 
