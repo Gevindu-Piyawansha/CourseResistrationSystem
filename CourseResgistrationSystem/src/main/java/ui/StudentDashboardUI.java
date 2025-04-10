@@ -8,11 +8,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+
 /**
  *
  * @author Admin
  */
-
 
 public class StudentDashboardUI {
     public static void showDashboard() {
@@ -26,7 +26,7 @@ public class StudentDashboardUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
-        
+
         // Background panel with a student dashboard background image.
         BackgroundPanel backgroundPanel = new BackgroundPanel(loadImage("/images/studentui.jpg"));
         backgroundPanel.setLayout(new BorderLayout());
@@ -57,27 +57,28 @@ public class StudentDashboardUI {
         header.setBorder(new EmptyBorder(20, 20, 20, 20));
         backgroundPanel.add(header, BorderLayout.NORTH);
         
-        // Button Actions.
+        // Button actions.
         courseRegButton.addActionListener(e -> {
+            // Open Course Registration (implementation not shown)
             CourseRegistrationPanel regPanel = new CourseRegistrationPanel();
             JDialog dialog = createDialog(frame, "Course Registration", regPanel);
             dialog.setVisible(true);
         });
         
         viewScheduleButton.addActionListener(e -> {
-            // Placeholder: Implement ViewSchedulePanel if needed.
-            JOptionPane.showMessageDialog(frame, "View Schedule Panel is under construction.");
+            // For demonstration, using a fixed student id (e.g., 1).
+            ViewSchedulePanel schedulePanel = new ViewSchedulePanel(1);
+            JDialog dialog = createDialog(frame, "View Schedule", schedulePanel);
+            dialog.setVisible(true);
         });
         
         profileButton.addActionListener(e -> {
-            // Placeholder: Implement ProfilePanel if needed.
             JOptionPane.showMessageDialog(frame, "Profile Panel is under construction.");
         });
         
         frame.setVisible(true);
     }
     
-    // Helper: Loads an image from the classpath.
     private static Image loadImage(String path) {
         java.net.URL imgURL = StudentDashboardUI.class.getResource(path);
         if (imgURL != null) {
@@ -87,7 +88,6 @@ public class StudentDashboardUI {
         }
     }
     
-    // Helper: Creates a styled button with an icon.
     private static JButton createButton(String text, String iconPath) {
         JButton button = new JButton(text);
         try {
@@ -102,13 +102,12 @@ public class StudentDashboardUI {
         button.setFont(new Font("Segoe UI", Font.PLAIN, 18));
         button.setBackground(new Color(255, 255, 255, 200));
         button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+            BorderFactory.createLineBorder(Color.DARK_GRAY, 1),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
         return button;
     }
     
-    // Helper: Creates a modal dialog with the given content panel.
     private static JDialog createDialog(JFrame owner, String title, JPanel content) {
         JDialog dialog = new JDialog(owner, title, true);
         dialog.getContentPane().add(content);
@@ -117,14 +116,11 @@ public class StudentDashboardUI {
         return dialog;
     }
     
-    // Custom BackgroundPanel that scales the background image.
     static class BackgroundPanel extends JPanel {
         private final Image image;
-        
         public BackgroundPanel(Image image) {
             this.image = image;
         }
-        
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
