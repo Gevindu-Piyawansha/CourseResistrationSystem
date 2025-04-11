@@ -64,5 +64,6 @@ public class ProfilePanel extends JPanel {
         
         add(header, BorderLayout.NORTH);
         add(infoPanel, BorderLayout.CENTER);
+        
     }
 }

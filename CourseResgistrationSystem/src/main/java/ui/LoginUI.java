@@ -11,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-
 /**
  *
  * @author Admin
@@ -19,6 +18,7 @@ import java.awt.image.BufferedImage;
 
 
 public class LoginUI {
+
     private static final UserDAO userDAO = new UserDAO();
 
     public static void showLoginScreen() {
@@ -100,7 +100,6 @@ public class LoginUI {
         loginButton.setForeground(Color.WHITE);
         loginButton.setFocusPainted(false);
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         overlayPanel.add(loginButton);
 
         // Add the overlay panel to the background panel using GridBagConstraints
@@ -113,6 +112,7 @@ public class LoginUI {
             User user = userDAO.authenticateUser(username, password);
             if (user != null) {
                 JOptionPane.showMessageDialog(frame, "Login successful!");
+                // Decide which dashboard to launch based on the user's role.
                 switch (user.getRole().toLowerCase()) {
                     case "admin":
                         AdminDashboardUI.showDashboard();
@@ -120,8 +120,14 @@ public class LoginUI {
                     case "faculty":
                         FacultyDashboardUI.showDashboard();
                         break;
+                    case "student":
+                        // For a student, pass the student's id to the dashboard
+                        new StudentDashboardUI(user.getId()).showDashboard();
+
+                        break;
                     default:
-                        StudentDashboardUI.showDashboard();
+                        // Default to student dashboard if role unrecognized
+                        new StudentDashboardUI(user.getId()).showDashboard();
                         break;
                 }
                 frame.dispose();

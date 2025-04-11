@@ -4,6 +4,8 @@
  */
 package ui;
 
+import dao.StudentDAO;
+import entity.Student;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -14,8 +16,21 @@ import java.awt.image.BufferedImage;
  */
 
 
+
 public class StudentDashboardUI {
-    public static void showDashboard() {
+
+    private int studentId;
+    private Student loggedInStudent;  // The complete student profile
+
+    // Constructor accepts the student's id.
+    public StudentDashboardUI(int studentId) {
+        this.studentId = studentId;
+        // Retrieve the student from the database.
+        loggedInStudent = new StudentDAO().getStudentById(studentId);
+    }
+    
+    public void showDashboard() {
+        // Set Nimbus look and feel.
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch(Exception ex) {
@@ -27,12 +42,27 @@ public class StudentDashboardUI {
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
         
-        // Background panel with a background image.
+        // Create a background panel with an image.
         BackgroundPanel backgroundPanel = new BackgroundPanel(loadImage("/images/studentui.jpg"));
         backgroundPanel.setLayout(new BorderLayout());
         frame.setContentPane(backgroundPanel);
         
-        // Sidebar menu panel (left)
+        // Header panel at the top.
+        JLabel header = new JLabel("Student Dashboard", SwingConstants.CENTER);
+        header.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        header.setForeground(Color.WHITE);
+        header.setBorder(new EmptyBorder(20, 20, 20, 20));
+        backgroundPanel.add(header, BorderLayout.NORTH);
+        
+        // Create a personalized welcome message using the student's first name.
+        String welcomeText = "Welcome, " + (loggedInStudent != null ? loggedInStudent.getFirstName() : "Student") + "!";
+        JLabel welcomeLabel = new JLabel(welcomeText, SwingConstants.CENTER);
+        welcomeLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        welcomeLabel.setForeground(Color.WHITE);
+        welcomeLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        backgroundPanel.add(welcomeLabel, BorderLayout.CENTER);
+        
+        // Sidebar menu panel.
         JPanel menuPanel = new JPanel();
         menuPanel.setOpaque(false);
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -47,34 +77,26 @@ public class StudentDashboardUI {
         menuPanel.add(viewScheduleButton);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         menuPanel.add(profileButton);
-        
         backgroundPanel.add(menuPanel, BorderLayout.WEST);
-        
-        // Header panel.
-        JLabel header = new JLabel("Student Dashboard", SwingConstants.CENTER);
-        header.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        header.setForeground(Color.WHITE);
-        header.setBorder(new EmptyBorder(20, 20, 20, 20));
-        backgroundPanel.add(header, BorderLayout.NORTH);
         
         // Button actions.
         courseRegButton.addActionListener(e -> {
-            // Open course registration (implementation not shown).
+            // Open the Course Registration Panel.
             CourseRegistrationPanel regPanel = new CourseRegistrationPanel();
             JDialog dialog = createDialog(frame, "Course Registration", regPanel);
             dialog.setVisible(true);
         });
         
         viewScheduleButton.addActionListener(e -> {
-            // Open view schedule panel (using fixed student id = 1 for demonstration)
-            ViewSchedulePanel schedulePanel = new ViewSchedulePanel(1);
+            // Open the View Schedule Panel, passing the logged-in studentId.
+            ViewSchedulePanel schedulePanel = new ViewSchedulePanel(studentId);
             JDialog dialog = createDialog(frame, "View Schedule", schedulePanel);
             dialog.setVisible(true);
         });
         
         profileButton.addActionListener(e -> {
-            // Open profile panel for student id 1 (replace with actual logged-in student's id)
-            ProfilePanel profilePanel = new ProfilePanel(1);
+            // Open the Profile Panel for the logged-in student.
+            ProfilePanel profilePanel = new ProfilePanel(studentId);
             JDialog dialog = createDialog(frame, "Profile", profilePanel);
             dialog.setVisible(true);
         });
@@ -82,7 +104,7 @@ public class StudentDashboardUI {
         frame.setVisible(true);
     }
     
-    // Helper: Loads an image from the classpath.
+    // Helper method to load an image from the classpath.
     private static Image loadImage(String path) {
         java.net.URL imgURL = StudentDashboardUI.class.getResource(path);
         if (imgURL != null) {
@@ -92,7 +114,7 @@ public class StudentDashboardUI {
         }
     }
     
-    // Helper: Creates a styled button with an icon.
+    // Helper method to create a styled button with an icon.
     private static JButton createButton(String text, String iconPath) {
         JButton button = new JButton(text);
         try {
@@ -113,7 +135,7 @@ public class StudentDashboardUI {
         return button;
     }
     
-    // Helper: Creates a modal dialog with the given content panel.
+    // Helper method to create a modal dialog with the provided content panel.
     private static JDialog createDialog(JFrame owner, String title, JPanel content) {
         JDialog dialog = new JDialog(owner, title, true);
         dialog.getContentPane().add(content);
@@ -122,7 +144,7 @@ public class StudentDashboardUI {
         return dialog;
     }
     
-    // Custom BackgroundPanel class.
+    // Custom BackgroundPanel class that scales a background image.
     static class BackgroundPanel extends JPanel {
         private final Image image;
         public BackgroundPanel(Image image) {
@@ -136,8 +158,12 @@ public class StudentDashboardUI {
             }
         }
     }
+     public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+        int sampleStudentId = 2; // Replace with an actual student ID that exists in your database
+        StudentDashboardUI dashboard = new StudentDashboardUI(sampleStudentId);
+        dashboard.showDashboard();
+    });
+}
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(StudentDashboardUI::showDashboard);
-    }
 }
