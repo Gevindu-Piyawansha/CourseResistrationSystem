@@ -34,4 +34,16 @@ public class GenerateReportsPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(textArea);
         add(scrollPane, BorderLayout.CENTER);
     }
+       // Main method to run this panel independently in a frame
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Generate Reports");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            // Add this panel to the frame's content pane
+            frame.getContentPane().add(new GenerateReportsPanel());
+            frame.pack();
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+        });
+    }
 }

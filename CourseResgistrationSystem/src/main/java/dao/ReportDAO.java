@@ -11,14 +11,14 @@ import java.sql.*;
  * @author Admin
  */
 
-
 public class ReportDAO {
     // Course Enrollment Report returns course code, name, and the enrolled count.
+    // Updated to join using course_code.
     public String getCourseEnrollmentReportString() {
         StringBuilder sb = new StringBuilder();
         String sql = "SELECT c.course_code, c.course_name, COUNT(e.student_id) AS enrolled " +
                      "FROM courses c " +
-                     "LEFT JOIN enrollments e ON c.id = e.course_id " +
+                     "LEFT JOIN enrollments e ON c.course_code = e.course_code " +
                      "GROUP BY c.course_code, c.course_name";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement pst = con.prepareStatement(sql);
@@ -46,11 +46,12 @@ public class ReportDAO {
     }
     
     // Student Progress Report – returns courses and enrollment status for a given student.
+    // Updated to join using course_code.
     public String getStudentProgressReportString(int studentId) {
         StringBuilder sb = new StringBuilder();
         String sql = "SELECT c.course_code, c.course_name, e.status " +
                      "FROM enrollments e " +
-                     "JOIN courses c ON e.course_id = c.id " +
+                     "JOIN courses c ON e.course_code = c.course_code " +
                      "WHERE e.student_id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
