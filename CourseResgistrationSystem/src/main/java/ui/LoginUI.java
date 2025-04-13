@@ -16,157 +16,88 @@ import java.awt.image.BufferedImage;
  * @author Admin
  */
 
-
 public class LoginUI {
-
     private static final UserDAO userDAO = new UserDAO();
 
     public static void showLoginScreen() {
         try {
+            // Set Nimbus Look and Feel
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
+        // Create the main login frame
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 350);
         frame.setLocationRelativeTo(null);
 
-        // Custom background panel
-        BackgroundPanel backgroundPanel = new BackgroundPanel(loadImage("/images/background.jpg"));
-        backgroundPanel.setLayout(new GridBagLayout());
-        frame.setContentPane(backgroundPanel);
-
+        // Create components for username and password using GridBagLayout
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JLabel userLabel = new JLabel("Username:");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(userLabel, gbc);
 
-        // Semi-transparent overlay panel
-        JPanel overlayPanel = new JPanel();
-        overlayPanel.setLayout(new BoxLayout(overlayPanel, BoxLayout.Y_AXIS));
-        overlayPanel.setOpaque(false);
-        overlayPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        JTextField usernameField = new JTextField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        panel.add(usernameField, gbc);
 
-        // Heading label
-        JLabel headingLabel = new JLabel("Course Management System");
-        headingLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        headingLabel.setForeground(Color.WHITE);
-        headingLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        overlayPanel.add(headingLabel);
+        JLabel passLabel = new JLabel("Password:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(passLabel, gbc);
 
-        // Optional subtitle
-        JLabel subtitleLabel = new JLabel("Manage Courses, Faculty, and More");
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        subtitleLabel.setForeground(Color.WHITE);
-        subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        overlayPanel.add(subtitleLabel);
+        JPasswordField passwordField = new JPasswordField(20);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(passwordField, gbc);
 
-        overlayPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-
-        // Form panel for username/password
-        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        formPanel.setOpaque(false);
-        formPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setForeground(Color.WHITE);
-        usernameLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        JTextField usernameField = new JTextField(15);
-        usernameField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setForeground(Color.WHITE);
-        passwordLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
-        JPasswordField passwordField = new JPasswordField(15);
-        passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-        formPanel.add(usernameLabel);
-        formPanel.add(usernameField);
-        formPanel.add(passwordLabel);
-        formPanel.add(passwordField);
-
-        overlayPanel.add(formPanel);
-        overlayPanel.add(Box.createRigidArea(new Dimension(0, 10)));
-
-        // Login button
         JButton loginButton = new JButton("Login");
-        loginButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        loginButton.setBackground(new Color(0, 120, 215));
-        loginButton.setForeground(Color.WHITE);
-        loginButton.setFocusPainted(false);
-        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        overlayPanel.add(loginButton);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(loginButton, gbc);
 
-        // Add the overlay panel to the background panel using GridBagConstraints
-        backgroundPanel.add(overlayPanel, gbc);
+        frame.add(panel);
 
-        // Login action
+        // Add the login action listener
         loginButton.addActionListener(e -> {
             String username = usernameField.getText();
             String password = new String(passwordField.getPassword());
-            User user = userDAO.authenticateUser(username, password);
+            // Validate user credentials – assumes UserDAO.validateUser returns a User object if successful
+            User user = userDAO.validateUser(username, password);
             if (user != null) {
-                JOptionPane.showMessageDialog(frame, "Login successful!");
-                // Decide which dashboard to launch based on the user's role.
-                switch (user.getRole().toLowerCase()) {
-                    case "admin":
-                        AdminDashboardUI.showDashboard();
-                        break;
-                    case "faculty":
-                        FacultyDashboardUI.showDashboard();
-                        break;
-                    case "student":
-                        // For a student, pass the student's id to the dashboard
-                        new StudentDashboardUI(user.getId()).showDashboard();
-
-                        break;
-                    default:
-                        // Default to student dashboard if role unrecognized
-                        new StudentDashboardUI(user.getId()).showDashboard();
-                        break;
+                frame.dispose(); // Close the login window
+                // Retrieve and check the user role (converting it to lower case for consistency)
+                String role = user.getRole().toLowerCase();
+                if (role.equals("admin")) {
+                    // Redirect to Admin dashboard
+                    AdminDashboardUI.showDashboard(user);
+                } else if (role.equals("faculty")) {
+                    // Redirect to Faculty dashboard
+                    FacultyDashboardUI.showDashboard(user);
+                } else if (role.equals("student")) {
+                    // Redirect to Student dashboard
+                    StudentDashboardUI.showDashboard(user);
+                } else {
+                    JOptionPane.showMessageDialog(null, "User role not recognized: " + user.getRole());
                 }
-                frame.dispose();
             } else {
-                JOptionPane.showMessageDialog(frame, "Invalid username or password", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         frame.setVisible(true);
     }
 
-    // Loads a background image
-    private static Image loadImage(String path) {
-        java.net.URL imgURL = LoginUI.class.getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL).getImage();
-        } else {
-            return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        }
-    }
-
-    // Custom panel for drawing the background
-    static class BackgroundPanel extends JPanel {
-        private final Image image;
-
-        public BackgroundPanel(Image image) {
-            this.image = image;
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            if (image != null) {
-                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
-            }
-        }
-    }
-
+    // Optional: main method to run the login screen
     public static void main(String[] args) {
-        showLoginScreen();
+        SwingUtilities.invokeLater(LoginUI::showLoginScreen);
     }
 }

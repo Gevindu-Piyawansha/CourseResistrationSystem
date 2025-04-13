@@ -49,26 +49,28 @@ public class CourseDAO {
         return saveCourse(course);
     }
     
-    // Retrieve all courses from the database
     public List<Course> getAllCourses() {
         List<Course> courses = new ArrayList<>();
         String sql = "SELECT * FROM courses";
-        try (Connection con = DBConnection.getConnection();
-             Statement stmt = con.createStatement();
+        
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Course course = new Course(
-                    rs.getInt("id"),
-                    rs.getString("course_code"),
-                    rs.getString("course_name"),
-                    rs.getString("description"),
-                    rs.getInt("credits")
-                );
-                courses.add(course);
-            }
+             
+             while (rs.next()) {
+                 Course course = new Course();
+                 course.setId(rs.getInt("id"));
+                 course.setCourseCode(rs.getString("course_code"));
+                 course.setCourseName(rs.getString("course_name"));
+                 course.setDescription(rs.getString("description"));
+                 course.setCredits(rs.getInt("credits"));
+                 
+                 courses.add(course);
+             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
         return courses;
     }
     

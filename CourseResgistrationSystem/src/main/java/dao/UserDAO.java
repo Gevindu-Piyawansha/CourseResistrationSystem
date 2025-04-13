@@ -81,10 +81,37 @@ public class UserDAO {
                             rs.getString("username"),
                             storedPassword,
                             rs.getString("role")
+                            
                         );
                     }
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    // Validate a user’s credentials. (Note: Passwords should be hashed in production.)
+    public User validateUser(String username, String password) {
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             
+             pstmt.setString(1, username);
+             pstmt.setString(2, password);
+             
+             try (ResultSet rs = pstmt.executeQuery()) {
+                 if (rs.next()) {
+                     User user = new User();
+                     user.setId(rs.getInt("id"));
+                     user.setUsername(rs.getString("username"));
+                     user.setPassword(rs.getString("password"));
+                     user.setRole(rs.getString("role"));
+                    
+                     user.setEmail(rs.getString("email"));
+                     return user;
+                 }
+             }
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -35,4 +35,9 @@ public class CourseService {
     public Course getCourseById(int courseId) {
         return courseDAO.getCourseById(courseId);
     }
+    public boolean registerCourse(int studentId, Course course) {
+        // For now, this method simply prints a message and returns true.
+        System.out.println("Registering student id " + studentId + " for course " + course.getCourseName());
+        return true;
+    }
 }

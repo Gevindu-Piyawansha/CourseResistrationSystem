@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ui;
+import entity.User;
 import javax.swing.*;
 import java.awt.*;
 /**
@@ -10,16 +11,16 @@ import java.awt.*;
  * @author Admin
  */
 
-
 public class FacultyDashboardUI {
-    public static void showDashboard() {
+    
+    public static void showDashboard(User user) {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch(Exception ex) {
             ex.printStackTrace();
         }
         
-        JFrame frame = new JFrame("Faculty Dashboard");
+        JFrame frame = new JFrame("Faculty Dashboard - " + user.getUsername());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
@@ -32,8 +33,8 @@ public class FacultyDashboardUI {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.CENTER;
         
-        // Header label
-        JLabel headerLabel = new JLabel("Welcome, Faculty!");
+        // Header label now includes the faculty's name
+        JLabel headerLabel = new JLabel("Welcome, " + user.getUsername() + "!");
         headerLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -61,7 +62,7 @@ public class FacultyDashboardUI {
         gbc.gridy = 1;
         mainPanel.add(buttonPanel, gbc);
         
-        // When buttons are clicked, open appropriate dialogs.
+        // Action listeners to open appropriate dialogs.
         viewCoursesButton.addActionListener(e -> {
             FacultyCoursesPanel coursesPanel = new FacultyCoursesPanel();
             JDialog dialog = createDialog(frame, "Assigned Courses", coursesPanel);
@@ -88,6 +89,8 @@ public class FacultyDashboardUI {
     }
     
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(FacultyDashboardUI::showDashboard);
+        // For testing, you can pass a dummy user
+        User testFaculty = new User(2, "facultyUser", "password", "faculty", "faculty@example.com");
+        SwingUtilities.invokeLater(() -> showDashboard(testFaculty));
     }
 }
