@@ -7,24 +7,23 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-
 import entity.Course;
-import entity.User;
+import entity.Student;
 import service.EnrollmentService;
+
 /**
  *
  * @author Admin
  */
 
-
 public class ViewSchedulePanel extends JPanel {
-    private User user;
+    private Student student;
     private EnrollmentService enrollmentService;
     private JTable scheduleTable;
     private JScrollPane scrollPane;
     
-    public ViewSchedulePanel(User user) {
-        this.user = user;
+    public ViewSchedulePanel(Student student) {
+        this.student = student;
         enrollmentService = new EnrollmentService();
         
         setLayout(new BorderLayout());
@@ -34,7 +33,7 @@ public class ViewSchedulePanel extends JPanel {
         add(heading, BorderLayout.NORTH);
         
         // Retrieve the courses in which the student is enrolled.
-        List<Course> courses = enrollmentService.getEnrolledCoursesForStudent(user.getId());
+        List<Course> courses = enrollmentService.getEnrolledCoursesForStudent(student.getId());
         
         String[] columnNames = {"Course Code", "Course Name", "Credits"};
         Object[][] data = new Object[courses.size()][3];
@@ -51,9 +50,9 @@ public class ViewSchedulePanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
     
-    // Optional: you could add a method to refresh the schedule after new enrollments.
+    // Optional: Refresh the schedule after new enrollments.
     public void refreshSchedule() {
-        List<Course> courses = enrollmentService.getEnrolledCoursesForStudent(user.getId());
+        List<Course> courses = enrollmentService.getEnrolledCoursesForStudent(student.getId());
         String[] columnNames = {"Course Code", "Course Name", "Credits"};
         Object[][] data = new Object[courses.size()][3];
         for (int i = 0; i < courses.size(); i++) {

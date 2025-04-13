@@ -13,19 +13,21 @@ package entity;
 public class Enrollment {
     private int id;
     private int studentId;
-    private int courseId;
+    private String courseCode;
     
     public Enrollment() {}
-    
-    public Enrollment(int id, int studentId, int courseId) {
+
+    // Constructor with id, studentId, and courseCode.
+    public Enrollment(int id, int studentId, String courseCode) {
         this.id = id;
         this.studentId = studentId;
-        this.courseId = courseId;
+        this.courseCode = courseCode;
     }
     
-    public Enrollment(int studentId, int courseId) {
+    // Constructor with studentId and courseCode.
+    public Enrollment(int studentId, String courseCode) {
         this.studentId = studentId;
-        this.courseId = courseId;
+        this.courseCode = courseCode;
     }
     
     // Getters and setters
@@ -43,10 +45,10 @@ public class Enrollment {
         this.studentId = studentId;
     }
     
-    public int getCourseId() {
-        return courseId;
+    public String getCourseCode() {
+        return courseCode;
     }
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 }

@@ -4,6 +4,7 @@
  */
 package ui;
 
+import entity.Student;
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,12 +17,11 @@ import entity.User;
  * @author Admin
  */
 
-
 public class ProfilePanel extends JPanel {
-    private User user;
+    private Student student;
     
-    public ProfilePanel(User user) {
-        this.user = user;
+    public ProfilePanel(Student student) {
+        this.student = student;
         setLayout(new GridLayout(0, 1, 10, 10));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
@@ -29,9 +29,10 @@ public class ProfilePanel extends JPanel {
         title.setFont(new Font("Arial", Font.BOLD, 18));
         add(title);
         
-        add(new JLabel("Username: " + user.getUsername()));
-        
-        add(new JLabel("Email: " + user.getEmail()));
-        // Add any other profile information you require.
+        add(new JLabel("Name: " + student.getFirstName() + " " + student.getLastName()));
+        add(new JLabel("Email: " + student.getEmail()));
+        add(new JLabel("Program: " + student.getProgram()));
+        add(new JLabel("Enrollment Year: " + student.getEnrollmentYear()));
+        // Add any other profile information as needed.
     }
 }

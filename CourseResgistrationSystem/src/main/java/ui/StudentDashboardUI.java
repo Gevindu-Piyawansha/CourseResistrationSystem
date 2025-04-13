@@ -4,10 +4,12 @@
  */
 package ui;
 
+import dao.StudentDAO;
+import dao.UserDAO;
+import entity.Student;
+import entity.User;
 import javax.swing.*;
 import java.awt.*;
-
-import entity.User;
 /**
  *
  * @author Admin
@@ -15,38 +17,56 @@ import entity.User;
 
 
 public class StudentDashboardUI extends JFrame {
-    private User user;
+    private Student student;
     private JTabbedPane tabbedPane;
 
-    public StudentDashboardUI(User user) {
-        this.user = user;
-        setTitle("Student Dashboard - " + user.getUsername());
+    // Constructor accepting a Student object.
+    public StudentDashboardUI(Student student) {
+        this.student = student; // assign the provided Student
+        setTitle("Student Dashboard - " + student.getFirstName() + " " + student.getLastName());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(800, 600);
         setLocationRelativeTo(null);
 
         tabbedPane = new JTabbedPane();
 
-        // Course Registration Panel
-        CourseRegistrationPanel registrationPanel = new CourseRegistrationPanel(user);
+        // Assuming these panels have been updated to accept a Student object
+        CourseRegistrationPanel registrationPanel = new CourseRegistrationPanel(student);
         tabbedPane.addTab("Course Registration", registrationPanel);
 
-        // View Schedule Panel
-        ViewSchedulePanel schedulePanel = new ViewSchedulePanel(user);
+        ViewSchedulePanel schedulePanel = new ViewSchedulePanel(student);
         tabbedPane.addTab("View Schedule", schedulePanel);
 
-        // Profile Panel
-        ProfilePanel profilePanel = new ProfilePanel(user);
+        ProfilePanel profilePanel = new ProfilePanel(student);
         tabbedPane.addTab("Profile", profilePanel);
 
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-    public static void showDashboard(User user) {
+    // Static method to show the dashboard with the given Student object.
+    public static void showDashboard(Student student) {
         SwingUtilities.invokeLater(() -> {
-            new StudentDashboardUI(user).setVisible(true);
+            new StudentDashboardUI(student).setVisible(true);
         });
     }
-  
-   
+
+    // Main method for testing the student dashboard.
+    public static void main(String[] args) {
+        // Retrieve a student user from the users table using UserDAO.
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUserByUsername("student1"); // Adjust username as needed.
+        
+        if (user != null && user.getRole().equalsIgnoreCase("student")) {
+            // Use StudentDAO to get the corresponding Student record.
+            StudentDAO studentDAO = new StudentDAO();
+            Student student = studentDAO.getStudentById(user.getId());
+            if (student != null) {
+                showDashboard(student);
+            } else {
+                System.err.println("No student details found for user " + user.getUsername());
+            }
+        } else {
+            System.err.println("Student user not found or user is not a student.");
+        }
+    }
 }

@@ -13,6 +13,12 @@ import java.awt.*;
  *
  * @author Admin
  */
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+
 public class StudentManagementUI {
 
     public static void showUI() {
@@ -46,8 +52,17 @@ public class StudentManagementUI {
 
         gbc.gridwidth = 1;
 
-        // First Name Field
+        // New User ID Field (to supply the user's id from the users table)
         gbc.gridy = 1;
+        gbc.gridx = 0;
+        mainPanel.add(new JLabel("User ID:"), gbc);
+        gbc.gridx = 1;
+        JTextField userIdField = new JTextField(10);
+        userIdField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        mainPanel.add(userIdField, gbc);
+
+        // First Name Field
+        gbc.gridy = 2;
         gbc.gridx = 0;
         mainPanel.add(new JLabel("First Name:"), gbc);
         gbc.gridx = 1;
@@ -56,7 +71,7 @@ public class StudentManagementUI {
         mainPanel.add(firstNameField, gbc);
 
         // Last Name Field
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridx = 0;
         mainPanel.add(new JLabel("Last Name:"), gbc);
         gbc.gridx = 1;
@@ -65,7 +80,7 @@ public class StudentManagementUI {
         mainPanel.add(lastNameField, gbc);
 
         // DOB Field
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridx = 0;
         mainPanel.add(new JLabel("DOB (YYYY-MM-DD):"), gbc);
         gbc.gridx = 1;
@@ -74,7 +89,7 @@ public class StudentManagementUI {
         mainPanel.add(dobField, gbc);
 
         // Program Field
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         gbc.gridx = 0;
         mainPanel.add(new JLabel("Program:"), gbc);
         gbc.gridx = 1;
@@ -83,7 +98,7 @@ public class StudentManagementUI {
         mainPanel.add(programField, gbc);
 
         // Email Field
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         gbc.gridx = 0;
         mainPanel.add(new JLabel("Email:"), gbc);
         gbc.gridx = 1;
@@ -92,7 +107,7 @@ public class StudentManagementUI {
         mainPanel.add(emailField, gbc);
 
         // Enrollment Year Field
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         gbc.gridx = 0;
         mainPanel.add(new JLabel("Enrollment Year:"), gbc);
         gbc.gridx = 1;
@@ -101,7 +116,7 @@ public class StudentManagementUI {
         mainPanel.add(yearField, gbc);
 
         // Add Button
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         gbc.gridx = 0;
         gbc.gridwidth = 2;
         JButton addButton = new JButton("Add Student");
@@ -112,21 +127,34 @@ public class StudentManagementUI {
         mainPanel.add(addButton, gbc);
 
         addButton.addActionListener(e -> {
+            String userIdStr = userIdField.getText().trim();
+            String firstName = firstNameField.getText().trim();
+            String lastName = lastNameField.getText().trim();
+            String dobInput = dobField.getText().trim();
+            String program = programField.getText().trim();
+            String email = emailField.getText().trim();
+            String yearStr = yearField.getText().trim();
+
+            if (userIdStr.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || dobInput.isEmpty() ||
+                program.isEmpty() || email.isEmpty() || yearStr.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             try {
-                int enrollmentYear = Integer.parseInt(yearField.getText().trim());
-                Student student = new Student(
-                        0, // id auto-generated
-                        firstNameField.getText().trim(),
-                        lastNameField.getText().trim(),
-                        dobField.getText().trim(),
-                        programField.getText().trim(),
-                        emailField.getText().trim(),
-                        enrollmentYear
-                );
+                int userId = Integer.parseInt(userIdStr);
+                int enrollmentYear = Integer.parseInt(yearStr);
+                // Validate date format. Throws exception if not valid.
+                java.time.LocalDate dobDate = java.time.LocalDate.parse(dobInput);
+                String dobFormatted = dobDate.toString();
+                // Create the student object with id=0 (auto-generated) and set the studentId as the user id.
+                Student student = new Student(userId, firstName, lastName, dobFormatted, program, email, enrollmentYear);
                 new StudentDAO().addStudent(student);
                 JOptionPane.showMessageDialog(frame, "Student Added!");
+                refreshTable(); // make sure you have a method to refresh your table.
+            } catch (java.time.format.DateTimeParseException ex) {
+                JOptionPane.showMessageDialog(frame, "Please enter the date in YYYY-MM-DD format.", "Invalid Date", JOptionPane.ERROR_MESSAGE);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, "Invalid Enrollment Year", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "User ID and Enrollment Year must be valid numbers.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -134,7 +162,10 @@ public class StudentManagementUI {
         frame.setVisible(true);
     }
 
-  
+    // Dummy refreshTable method; implement as needed to update your table data.
+    private static void refreshTable() {
+        // Implementation code to refresh your table.
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(StudentManagementUI::showUI);

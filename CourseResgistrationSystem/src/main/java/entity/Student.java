@@ -11,18 +11,19 @@ import java.time.LocalDate;
 
 
 public class Student {
-    private int id;
+    private int id;           // auto-generated primary key in the students table
+    private int studentId;    // foreign key referencing users(id)
     private String firstName;
     private String lastName;
-    private String dob; // format: "YYYY-MM-DD"
+    private String dob;       // e.g., "YYYY-MM-DD"
     private String program;
     private String email;
     private int enrollmentYear;
     
-    // Constructor with all fields.
-    public Student(int id, String firstName, String lastName, String dob, 
+    // Constructor for inserting a new student
+    public Student(int studentId, String firstName, String lastName, String dob, 
                    String program, String email, int enrollmentYear) {
-        this.id = id;
+        this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
@@ -31,9 +32,28 @@ public class Student {
         this.enrollmentYear = enrollmentYear;
     }
     
-    // Getters and setters...
+    // Constructor that includes the auto-generated id
+    public Student(int id, int studentId, String firstName, String lastName, String dob, 
+                   String program, String email, int enrollmentYear) {
+        this.id = id;
+        this.studentId = studentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.program = program;
+        this.email = email;
+        this.enrollmentYear = enrollmentYear;
+    }
+    
+    // Default constructor
+    public Student() {}
+
+    // Getters and setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
+    
+    public int getStudentId() { return studentId; }
+    public void setStudentId(int studentId) { this.studentId = studentId; }
     
     public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }

@@ -4,7 +4,9 @@
  */
 package ui;
 
+import dao.StudentDAO;
 import dao.UserDAO;
+import entity.Student;
 import entity.User;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -66,32 +68,37 @@ public class LoginUI {
 
         frame.add(panel);
 
-        // Add the login action listener
-        loginButton.addActionListener(e -> {
-            String username = usernameField.getText();
-            String password = new String(passwordField.getPassword());
-            // Validate user credentials – assumes UserDAO.validateUser returns a User object if successful
-            User user = userDAO.validateUser(username, password);
-            if (user != null) {
-                frame.dispose(); // Close the login window
-                // Retrieve and check the user role (converting it to lower case for consistency)
-                String role = user.getRole().toLowerCase();
-                if (role.equals("admin")) {
-                    // Redirect to Admin dashboard
-                    AdminDashboardUI.showDashboard(user);
-                } else if (role.equals("faculty")) {
-                    // Redirect to Faculty dashboard
-                    FacultyDashboardUI.showDashboard(user);
-                } else if (role.equals("student")) {
-                    // Redirect to Student dashboard
-                    StudentDashboardUI.showDashboard(user);
-                } else {
-                    JOptionPane.showMessageDialog(null, "User role not recognized: " + user.getRole());
-                }
+       // Inside your login button action listener in LoginUI.java:
+loginButton.addActionListener(e -> {
+    String username = usernameField.getText();
+    String password = new String(passwordField.getPassword());
+    // Validate user credentials. Assume UserDAO.validateUser returns a User object from the users table.
+    User user = userDAO.validateUser(username, password);
+    if (user != null) {
+        frame.dispose(); // Close the login window
+        String role = user.getRole().toLowerCase();
+        if (role.equals("student")) {
+            // For a student login, retrieve additional student details.
+            StudentDAO studentDAO = new StudentDAO();
+            Student student = studentDAO.getStudentById(user.getId());
+            if (student != null) {
+                // Now pass the Student object to your StudentDashboardUI.
+                StudentDashboardUI.showDashboard(student);
             } else {
-                JOptionPane.showMessageDialog(frame, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Student details not found.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        });
+        } else if (role.equals("admin")) {
+            AdminDashboardUI.showDashboard(user);
+        } else if (role.equals("faculty")) {
+            FacultyDashboardUI.showDashboard(user);
+        } else {
+            JOptionPane.showMessageDialog(null, "User role not recognized: " + user.getRole());
+        }
+    } else {
+        JOptionPane.showMessageDialog(frame, "Invalid username or password", "Login Error", JOptionPane.ERROR_MESSAGE);
+    }
+});
+
 
         frame.setVisible(true);
     }
