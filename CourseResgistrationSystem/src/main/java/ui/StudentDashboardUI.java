@@ -16,57 +16,68 @@ import java.awt.*;
  */
 
 
+/**
+ * Modern and professional Student Dashboard UI
+ */
 public class StudentDashboardUI extends JFrame {
     private Student student;
     private JTabbedPane tabbedPane;
 
-    // Constructor accepting a Student object.
+    // Define a modern font and color scheme
+    private static final Font DEFAULT_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+    private static final Color BACKGROUND_COLOR = new Color(245, 245, 245);
+    private static final Color TAB_COLOR = new Color(230, 230, 250);
+
     public StudentDashboardUI(Student student) {
-        this.student = student; // assign the provided Student
-        setTitle("Student Dashboard - " + student.getFirstName() + " " + student.getLastName());
+        this.student = student;
+        setTitle("🎓 Student Dashboard - " + student.getFirstName() + " " + student.getLastName());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(1000, 700);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(BACKGROUND_COLOR);
 
+        initializeComponents();
+    }
+
+    private void initializeComponents() {
         tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(DEFAULT_FONT);
+        tabbedPane.setBackground(TAB_COLOR);
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Assuming these panels have been updated to accept a Student object
-        CourseRegistrationPanel registrationPanel = new CourseRegistrationPanel(student);
-        tabbedPane.addTab("Course Registration", registrationPanel);
+        // Create and add tabs
+        tabbedPane.addTab("📚 Course Registration", new CourseRegistrationPanel(student));
+        tabbedPane.addTab("🗓 View Schedule", new ViewSchedulePanel(student));
+        tabbedPane.addTab("👤 Profile", new ProfilePanel(student));
 
-        ViewSchedulePanel schedulePanel = new ViewSchedulePanel(student);
-        tabbedPane.addTab("View Schedule", schedulePanel);
-
-        ProfilePanel profilePanel = new ProfilePanel(student);
-        tabbedPane.addTab("Profile", profilePanel);
-
+        // Add to the frame
         add(tabbedPane, BorderLayout.CENTER);
     }
 
-    // Static method to show the dashboard with the given Student object.
     public static void showDashboard(Student student) {
         SwingUtilities.invokeLater(() -> {
-            new StudentDashboardUI(student).setVisible(true);
+            StudentDashboardUI dashboard = new StudentDashboardUI(student);
+            dashboard.setVisible(true);
         });
     }
 
-    // Main method for testing the student dashboard.
     public static void main(String[] args) {
-        // Retrieve a student user from the users table using UserDAO.
+        // Simulate login
         UserDAO userDAO = new UserDAO();
-        User user = userDAO.getUserByUsername("student1"); // Adjust username as needed.
-        
+        User user = userDAO.getUserByUsername("student1");
+
         if (user != null && user.getRole().equalsIgnoreCase("student")) {
-            // Use StudentDAO to get the corresponding Student record.
             StudentDAO studentDAO = new StudentDAO();
             Student student = studentDAO.getStudentById(user.getId());
+
             if (student != null) {
                 showDashboard(student);
             } else {
-                System.err.println("No student details found for user " + user.getUsername());
+                JOptionPane.showMessageDialog(null, "Student details not found for: " + user.getUsername(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            System.err.println("Student user not found or user is not a student.");
+            JOptionPane.showMessageDialog(null, "Student user not found or not valid.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

@@ -18,29 +18,24 @@ import java.util.List;
 
 public class StudentDAO {
 
-    // Inserts a new student record into the students table.
+    // Insert a new student record.
     public void addStudent(Student student) {
-        // Include student_id (which references users(id)) in the insert statement.
-        String sql = "INSERT INTO students (student_id, first_name, last_name, dob, program, email, enrollment_year) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = DBConnection.getConnection(); 
+        String sql = "INSERT INTO students (student_id, first_name, last_name, dob, program, email, enrollment_year) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection con = DBConnection.getConnection();
              PreparedStatement pst = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            // Set the student_id with the value from the user id.
+             
             pst.setInt(1, student.getStudentId());
             pst.setString(2, student.getFirstName());
             pst.setString(3, student.getLastName());
-            // Convert String to SQL Date (expects format "YYYY-MM-DD")
             pst.setDate(4, Date.valueOf(student.getDob()));
             pst.setString(5, student.getProgram());
             pst.setString(6, student.getEmail());
             pst.setInt(7, student.getEnrollmentYear());
-
-            int affectedRows = pst.executeUpdate();
-            if (affectedRows > 0) {
+            
+            int affected = pst.executeUpdate();
+            if (affected > 0) {
                 try (ResultSet rs = pst.getGeneratedKeys()) {
                     if (rs.next()) {
-                        // Set the auto-generated id to the student object.
                         student.setId(rs.getInt(1));
                     }
                 }
@@ -49,6 +44,7 @@ public class StudentDAO {
             ex.printStackTrace();
         }
     }
+    
     public List<Student> getAllStudents() {
     List<Student> students = new ArrayList<>();
     // Include student_id in the SELECT so we can capture the foreign key from users table.
@@ -117,28 +113,25 @@ public class StudentDAO {
 
     // Other methods (getAllStudents, updateStudent, deleteStudent, etc.)
     
-    // Retrieval method updated to use student_id (foreign key) for matching.
+    // Retrieve student by the foreign key (user's id).
     public Student getStudentById(int userId) {
-        String sql = "SELECT id, student_id, first_name, last_name, dob, program, email, enrollment_year " +
-                     "FROM students WHERE student_id = ?";
+        String sql = "SELECT id, student_id, first_name, last_name, dob, program, email, enrollment_year FROM students WHERE student_id = ?";
         Student student = null;
         try (Connection con = DBConnection.getConnection();
              PreparedStatement pst = con.prepareStatement(sql)) {
-            
-            pst.setInt(1, userId);  // Use the user id as the student_id value.
+            pst.setInt(1, userId);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    student = new Student();
-                    student.setId(rs.getInt("id"));
-                    student.setStudentId(rs.getInt("student_id"));
-                    student.setFirstName(rs.getString("first_name"));
-                    student.setLastName(rs.getString("last_name"));
-                    java.sql.Date dobDate = rs.getDate("dob");
-                    String dob = (dobDate == null) ? "" : dobDate.toString();
-                    student.setDob(dob);
-                    student.setProgram(rs.getString("program"));
-                    student.setEmail(rs.getString("email"));
-                    student.setEnrollmentYear(rs.getInt("enrollment_year"));
+                    student = new Student(
+                        rs.getInt("id"),
+                        rs.getInt("student_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("dob"),
+                        rs.getString("program"),
+                        rs.getString("email"),
+                        rs.getInt("enrollment_year")
+                    );
                 }
             }
         } catch (SQLException ex) {

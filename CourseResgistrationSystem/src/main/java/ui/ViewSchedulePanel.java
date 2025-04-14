@@ -63,4 +63,20 @@ public class ViewSchedulePanel extends JPanel {
         }
         scheduleTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
     }
+    // Main method to run the panel independently.
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            // Create a dummy student for testing. 
+            // Adjust the parameters to match your Student entity's constructor.
+            // Here, we assume a constructor: Student(int id, int studentId, String firstName, String lastName, String dob, String program, String email, int enrollmentYear)
+            Student dummyStudent = new Student(1, 1, "John", "Doe", "2000-01-01", "Computer Science", "john@example.com", 2022);
+            
+            JFrame frame = new JFrame("View Schedule Test");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(600, 400);
+            frame.setLocationRelativeTo(null);
+            frame.setContentPane(new ViewSchedulePanel(dummyStudent));
+            frame.setVisible(true);
+        });
+    }
 }
