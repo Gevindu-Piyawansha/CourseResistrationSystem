@@ -1,4 +1,5 @@
 Course Registration System
+
 Overview
 The Course Registration System is a Java Swing-based desktop application that allows students, faculty, and administrators to manage course registrations and student information. The project features:
 
