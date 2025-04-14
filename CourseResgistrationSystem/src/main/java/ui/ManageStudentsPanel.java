@@ -25,7 +25,7 @@ import java.time.format.DateTimeParseException;
 
 public class ManageStudentsPanel extends JPanel {
 
-    private StudentDAO studentDAO = new StudentDAO();
+   private StudentDAO studentDAO = new StudentDAO();
     private JTable table;
     private DefaultTableModel tableModel;
 
@@ -34,8 +34,6 @@ public class ManageStudentsPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         setPreferredSize(new Dimension(900, 400));
 
-        // Updated column names to include Student ID (foreign key), assuming column order:
-        // 0: ID (primary key), 1: Student ID (foreign key), 2: First Name, 3: Last Name, 4: DOB, 5: Program, 6: Email, 7: Enrollment Year.
         String[] columnNames = {"ID", "Student ID", "First Name", "Last Name", "DOB", "Program", "Email", "Enrollment Year"};
         tableModel = new DefaultTableModel(columnNames, 0);
         table = new JTable(tableModel);
@@ -57,10 +55,15 @@ public class ManageStudentsPanel extends JPanel {
         buttonsPanel.add(refreshBtn);
         add(buttonsPanel, BorderLayout.SOUTH);
 
-        // Instead of showing an inline form, open the AdminStudentRegistrationUi for adding a new student.
+        // Open registration UI as a modal dialog so it comes to front.
         addStudentBtn.addActionListener(e -> {
-            new AdminStudentRegistrationUi().setVisible(true);
+            AdminStudentRegistrationUi registrationUI = new AdminStudentRegistrationUi();
+            registrationUI.setModal(true);
+            registrationUI.setVisible(true);
+            // After registration, refresh the table.
+            refreshTable();
         });
+        
         editStudentBtn.addActionListener(e -> editStudent());
         deleteStudentBtn.addActionListener(e -> deleteStudent());
         refreshBtn.addActionListener(e -> refreshTable());

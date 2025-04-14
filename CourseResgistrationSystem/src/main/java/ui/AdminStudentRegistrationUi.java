@@ -18,11 +18,13 @@ import java.time.LocalDate;
  */
 
 
-public class AdminStudentRegistrationUi extends JFrame {
+public class AdminStudentRegistrationUi extends JDialog {
 
     public AdminStudentRegistrationUi() {
+        // Set as modal so it always comes in front of its parent.
+        setModal(true);
         setTitle("Admin - Register New Student");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(500, 600);
         setLocationRelativeTo(null);
         initComponents();
@@ -42,7 +44,6 @@ public class AdminStudentRegistrationUi extends JFrame {
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(header, gbc);
-        
         gbc.gridwidth = 1;
         
         // Default Username
@@ -56,7 +57,9 @@ public class AdminStudentRegistrationUi extends JFrame {
         gbc.gridx = 0; gbc.gridy = 2;
         panel.add(new JLabel("Default Password:"), gbc);
         gbc.gridx = 1;
-        JPasswordField passwordField = new JPasswordField(20);
+        // For consistency, you could force default password "student8"
+        JTextField passwordField = new JTextField("student8", 20);
+        passwordField.setEditable(false);
         panel.add(passwordField, gbc);
         
         // First Name
@@ -108,7 +111,7 @@ public class AdminStudentRegistrationUi extends JFrame {
         
         addButton.addActionListener(e -> {
             String defUsername = usernameField.getText().trim();
-            String defPassword = new String(passwordField.getPassword());
+            String defPassword = new String(passwordField.getText()); // "student8"
             String firstName = firstNameField.getText().trim();
             String lastName = lastNameField.getText().trim();
             String dobInput = dobField.getText().trim();
@@ -126,7 +129,7 @@ public class AdminStudentRegistrationUi extends JFrame {
                 String dobFormatted = dobDate.toString();
                 int enrollmentYear = Integer.parseInt(yearStr);
                 
-                // Create User with default credentials. The default password here (defPassword) is what the student uses on first login.
+                // Create User with default credentials.
                 UserDAO userDAO = new UserDAO();
                 User newUser = new User(defUsername, defPassword, "student", email);
                 newUser = userDAO.createUser(newUser);
@@ -141,6 +144,7 @@ public class AdminStudentRegistrationUi extends JFrame {
                 studentDAO.addStudent(newStudent);
                 
                 JOptionPane.showMessageDialog(this, "Student registered successfully!\nDefault credentials:\nUsername: " + defUsername + "\nPassword: " + defPassword);
+                dispose(); // Close the registration dialog.
             } catch(Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -149,7 +153,7 @@ public class AdminStudentRegistrationUi extends JFrame {
         
         add(panel);
     }
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new AdminStudentRegistrationUi().setVisible(true);
